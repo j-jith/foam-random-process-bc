@@ -1,0 +1,4 @@
+myDerivedFvPatchFields = fields/fvPatchFields/derived
+$(myDerivedFvPatchFields)/randomProcessFixedValue/randomProcessFixedValueFvPatchFields.C
+
+LIB = $(FOAM_USER_LIBBIN)/librandomProcessFixedValue
