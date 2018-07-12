@@ -233,8 +233,10 @@ void randomProcessFixedValueFvPatchField<Type>::write(Ostream& os) const
     gustDir_.writeEntry("gustDir", os);
     os.writeKeyword("scaleFac")
         << scaleFac_ << token::END_STATEMENT << nl;
-    // os.writeKeyword("frequency")
-    //     << frequency_ << token::END_STATEMENT << nl;
+    os.writeKeyword("circFreq")
+        << circFreq_ << token::END_STATEMENT << nl;
+    os.writeKeyword("psd")
+        << psd_ << token::END_STATEMENT << nl;
     this->writeEntry("value", os);
 }
 
