@@ -67,6 +67,7 @@ randomProcessFixedValueFvPatchField<Type>::randomProcessFixedValueFvPatchField
 )
 :
     fixedValueFvPatchField<Type>(p, iF),
+    U0_(p.size()),
     gustDir_(p.size()),
     scaleFac_(1.0),
     circFreq_(scalarList(2, 0.0)),
@@ -85,6 +86,7 @@ randomProcessFixedValueFvPatchField<Type>::randomProcessFixedValueFvPatchField
 )
 :
     fixedValueFvPatchField<Type>(p, iF),
+    U0_("U0", dict, p.size()),
     gustDir_("gustDir", dict, p.size()),
     scaleFac_(readScalar(dict.lookup("scaleFac"))),
     circFreq_(dict.lookup("circFreq")),
@@ -101,7 +103,7 @@ randomProcessFixedValueFvPatchField<Type>::randomProcessFixedValueFvPatchField
     }
     else
     {
-        fixedValueFvPatchField<Type>::operator==(scaleFac_*gustDir_*generate());
+        fixedValueFvPatchField<Type>::operator==(U0_ + scaleFac_*gustDir_*generate());
     }
 }
 
@@ -116,6 +118,7 @@ randomProcessFixedValueFvPatchField<Type>::randomProcessFixedValueFvPatchField
 )
 :
     fixedValueFvPatchField<Type>(ptf, p, iF, mapper),
+    U0_(ptf.U0_, mapper),
     gustDir_(ptf.gustDir_, mapper),
     scaleFac_(ptf.scaleFac_),
     circFreq_(ptf.circFreq_),
@@ -132,6 +135,7 @@ randomProcessFixedValueFvPatchField<Type>::randomProcessFixedValueFvPatchField
 )
 :
     fixedValueFvPatchField<Type>(ptf),
+    U0_(ptf.U0_),
     gustDir_(ptf.gustDir_),
     scaleFac_(ptf.scaleFac_),
     circFreq_(ptf.circFreq_),
@@ -149,6 +153,7 @@ randomProcessFixedValueFvPatchField<Type>::randomProcessFixedValueFvPatchField
 )
 :
     fixedValueFvPatchField<Type>(ptf, iF),
+    U0_(ptf.U0_),
     gustDir_(ptf.gustDir_),
     scaleFac_(ptf.scaleFac_),
     circFreq_(ptf.circFreq_),
@@ -167,6 +172,7 @@ void randomProcessFixedValueFvPatchField<Type>::autoMap
 )
 {
     fixedValueFvPatchField<Type>::autoMap(m);
+    U0_.autoMap(m);
     gustDir_.autoMap(m);
 }
 
@@ -183,6 +189,7 @@ void randomProcessFixedValueFvPatchField<Type>::rmap
     const randomProcessFixedValueFvPatchField<Type>& tiptf =
         refCast<const randomProcessFixedValueFvPatchField<Type> >(ptf);
 
+    U0_.rmap(tiptf.U0_, addr);
     gustDir_.rmap(tiptf.gustDir_, addr);
 }
 
@@ -198,7 +205,7 @@ void randomProcessFixedValueFvPatchField<Type>::updateCoeffs()
     if (curTimeIndex_ != this->db().time().timeIndex())
     {
         Field<Type>& patchField = *this;
-        patchField = scaleFac_*gustDir_*generate();
+        patchField = U0_ + scaleFac_*gustDir_*generate();
 
         //const vectorField& Cf = patch().Cf();
 
@@ -222,6 +229,7 @@ template<class Type>
 void randomProcessFixedValueFvPatchField<Type>::write(Ostream& os) const
 {
     fvPatchField<Type>::write(os);
+    U0_.writeEntry("U0", os);
     gustDir_.writeEntry("gustDir", os);
     os.writeKeyword("scaleFac")
         << scaleFac_ << token::END_STATEMENT << nl;

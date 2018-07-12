@@ -54,6 +54,9 @@ class randomProcessFixedValueFvPatchField
 {
     // Private data
 
+        //- Background flow
+        Field<Type> U0_;
+
         //- Random gust direction
         Field<Type> gustDir_;
 
@@ -151,13 +154,24 @@ public:
 
         // Access
 
+            //- Return the beackground flow
+            const Field<Type>& U0() const
+            {
+                return U0_;
+            }
+
+            //- Return reference to the background flow to allow adjustment
+            Field<Type>& U0()
+            {
+                return U0_;
+            }
+
             //- Return the gust direction
             const Field<Type>& gustDir() const
             {
                 return gustDir_;
             }
 
-            //- Return reference to the gust direction to allow adjustment
             Field<Type>& gustDir()
             {
                 return gustDir_;
