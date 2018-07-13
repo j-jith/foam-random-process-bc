@@ -69,6 +69,9 @@ class randomProcessFixedValueFvPatchField
         //- Random number generator
         Random randGen_;
 
+        //- Random phase container
+        List<scalar> phi_;
+
         //- Current time index
         label curTimeIndex_;
 
@@ -76,7 +79,7 @@ class randomProcessFixedValueFvPatchField
     // Private member functions
 
         //- Return uniformly distributed random phase in [0, 2*pi]
-        scalar randomPhase();
+        List<scalar> randomPhase();
 
         //- Return random process realisation
         scalar generate();

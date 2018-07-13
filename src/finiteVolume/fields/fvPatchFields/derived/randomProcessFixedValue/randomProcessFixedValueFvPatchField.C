@@ -36,9 +36,16 @@ namespace Foam
 // * * * * * * * * * * * * * Private Member Functions  * * * * * * * * * * * //
 
 template<class Type>
-scalar randomProcessFixedValueFvPatchField<Type>::randomPhase()
+List<scalar> randomProcessFixedValueFvPatchField<Type>::randomPhase()
 {
-    return randGen_.scalar01() * 2*mathematicalConstant::pi;
+    List<scalar> phi(circFreq_.size(), 0.);
+
+    forAll(phi, i)
+    {
+        phi[i] = randGen_.scalar01() * 2*mathematicalConstant::pi;
+    }
+
+    return phi;
 }
 
 template<class Type>
@@ -50,7 +57,7 @@ scalar randomProcessFixedValueFvPatchField<Type>::generate()
     forAll(circFreq_, i)
     {
         //x += sqrt(2*psd_[i]) * cos(circFreq_[i]*this->db().time().value() + randomPhase());
-        x += sqrt(2*dw*psd_[i]) * cos(circFreq_[i]*this->db().time().value() + randomPhase());
+        x += sqrt(2*dw*psd_[i]) * cos(circFreq_[i]*this->db().time().value() + phi_[i]);
     }
 
     return x;
@@ -74,7 +81,9 @@ randomProcessFixedValueFvPatchField<Type>::randomProcessFixedValueFvPatchField
     psd_(scalarList(2, 0.0)),
     randGen_(label(0)),
     curTimeIndex_(-1)
-{}
+{
+    phi_ = randomPhase();
+}
 
 
 template<class Type>
@@ -94,6 +103,7 @@ randomProcessFixedValueFvPatchField<Type>::randomProcessFixedValueFvPatchField
     randGen_(label(0)),
     curTimeIndex_(-1)
 {
+    phi_ = randomPhase();
     if (dict.found("value"))
     {
         fixedValueFvPatchField<Type>::operator==
@@ -125,7 +135,9 @@ randomProcessFixedValueFvPatchField<Type>::randomProcessFixedValueFvPatchField
     psd_(ptf.psd_),
     randGen_(ptf.randGen_),
     curTimeIndex_(-1)
-{}
+{
+    phi_ = randomPhase();
+}
 
 
 template<class Type>
@@ -142,7 +154,9 @@ randomProcessFixedValueFvPatchField<Type>::randomProcessFixedValueFvPatchField
     psd_(ptf.psd_),
     randGen_(ptf.randGen_),
     curTimeIndex_(-1)
-{}
+{
+    phi_ = randomPhase();
+}
 
 
 template<class Type>
@@ -160,7 +174,9 @@ randomProcessFixedValueFvPatchField<Type>::randomProcessFixedValueFvPatchField
     psd_(ptf.psd_),
     randGen_(ptf.randGen_),
     curTimeIndex_(-1)
-{}
+{
+    phi_ = randomPhase();
+}
 
 
 // * * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * //

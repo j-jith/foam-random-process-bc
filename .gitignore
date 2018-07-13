@@ -1,5 +1,7 @@
 # Created by https://www.gitignore.io/api/vim,openfoam
 
+*.bak
+
 ### OpenFOAM ###
 # Timestep directories
 0.*

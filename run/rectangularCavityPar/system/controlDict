@@ -50,3 +50,23 @@ adjustTimeStep  no;
 maxCo           0.3;
 
 libs ("librandomProcessFixedValue.so");
+
+functions
+(
+    probes1
+    {
+        type probes;
+        functionObjectLibs ("libsampling.so");
+        enabled true;
+        outputControl timeStep;
+        outputInterval 1;
+        probeLocations
+        (
+            (0.0 0.5 0.005)
+        );
+        fields
+        (
+            U
+        );
+    }
+);
