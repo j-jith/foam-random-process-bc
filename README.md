@@ -29,3 +29,10 @@ Two example cases are provided in the [run](run/) directory:
 
 Please have a look at the [0/U](run/rectangularCavityPar/0/U) file to
 understand how the gust is to be specified.
+
+## To Do
+
+- Change the seed of the random number generator (`randGen_`) in the class
+  constructor using:
+    - clock time, or
+    - a parameter specified by the user.
